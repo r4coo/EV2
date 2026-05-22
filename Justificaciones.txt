@@ -1,0 +1,7 @@
+Justificación:
+
+Los volúmenes de Docker ofrecen varias ventajas:
+
+- Rendimiento de E/S mejorado: son gestionados por el motor de Docker, lo que optimiza las operaciones de entrada/salida en entornos en la nube (por ejemplo, AWS EC2).
+- Aislamiento de datos: separan los datos del sistema de archivos del host.
+- Persistencia: evitan la pérdida de información si los contenedores se reinician o se destruyen.

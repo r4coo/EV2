@@ -1,0 +1,47 @@
+name: Deploy to AWS EC2
+
+on:
+  push:
+    branches: [ "deploy" ]  # Se activa solo en la rama deploy
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # 1. Autenticarse en el Registro de Contenedores (Ejemplo con Docker Hub)
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    # 2. Construir y Publicar la imagen usando el Dockerfile Multi-stage
+    - name: Build and Push Docker Image
+      run: |
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/innovatech-component:latest .
+        docker push ${{ secrets.DOCKERHUB_USERNAME }}/innovatech-component:latest
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+    # 3. Conectarse a AWS EC2 vía SSH para actualizar el contenedor
+    - name: Deploy to EC2 via SSH
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ubuntu
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          # Descargar la última versión de la imagen recién compilada
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/innovatech-component:latest
+          
+          # Detener el contenedor anterior si existe
+          docker stop innovatech-app || true
+          docker rm innovatech-app || true
+          
+          # Levantar el nuevo contenedor mapeando puertos y variables
+          docker run -d --name foodie-app -p 80:80 ${{ secrets.DOCKERHUB_USERNAME }}/innovatech-component:latest
