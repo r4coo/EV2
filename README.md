@@ -1,6 +1,6 @@
 # Innovatech Chile - Plataforma de Despliegue Automatizado (Etapa 2)
 
-Este repositorio contiene el código fuente y la configuración de infraestructura como código para el componente **[Especificar aquí: Frontend o Backend]** del sistema desarrollado para Innovatech Chile. El objetivo de esta etapa es lograr la contenedorización completa de la solución y la automatización de su ciclo de vida mediante un pipeline de CI/CD.
+Este repositorio contiene el código fuente y la configuración de infraestructura como código para el componente del sistema desarrollado para Innovatech Chile. El objetivo de esta etapa es lograr la contenedorización completa de la solución y la automatización de su ciclo de vida mediante un pipeline de CI/CD.
 
 ## 🚀 Arquitectura y Decisiones Técnicas
 
